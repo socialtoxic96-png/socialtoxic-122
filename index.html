@@ -1,0 +1,847 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Social Toxic</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+scroll-behavior:smooth;
+}
+
+body{
+background:#050505;
+font-family:'Poppins',sans-serif;
+color:white;
+overflow-x:hidden;
+}
+
+/* Matrix Background */
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+opacity:0.2;
+}
+
+body::before{
+content:'';
+position:fixed;
+width:500px;
+height:500px;
+background:#00ff6640;
+filter:blur(140px);
+top:-150px;
+left:-150px;
+z-index:-1;
+}
+
+body::after{
+content:'';
+position:fixed;
+width:500px;
+height:500px;
+background:#00ff6620;
+filter:blur(140px);
+bottom:-150px;
+right:-150px;
+z-index:-1;
+}
+
+/* Loader */
+#loader{
+position:fixed;
+inset:0;
+background:black;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+font-family:'Orbitron',sans-serif;
+z-index:9999;
+color:#00ff66;
+}
+
+#loader h1{
+font-size:40px;
+margin-bottom:20px;
+text-shadow:0 0 20px #00ff66;
+}
+
+.typing{
+overflow:hidden;
+border-right:3px solid #00ff66;
+white-space:nowrap;
+animation:typing 4s steps(40,end),blink .8s infinite;
+font-size:18px;
+}
+
+@keyframes typing{
+from{width:0}
+to{width:100%}
+}
+
+@keyframes blink{
+50%{border-color:transparent}
+}
+
+/* Navbar */
+nav{
+position:sticky;
+top:0;
+width:100%;
+padding:20px 8%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+backdrop-filter:blur(12px);
+background:#00000070;
+border-bottom:1px solid #00ff6630;
+z-index:100;
+}
+
+.logo{
+font-family:'Orbitron',sans-serif;
+font-size:32px;
+font-weight:900;
+color:#00ff66;
+text-shadow:0 0 20px #00ff66;
+letter-spacing:4px;
+animation:glitch 3s infinite;
+}
+
+@keyframes glitch{
+0%{text-shadow:0 0 10px #00ff66}
+50%{text-shadow:2px 2px 20px #00ff66,-2px -2px 20px #00ff66}
+100%{text-shadow:0 0 10px #00ff66}
+}
+
+.nav-links{
+display:flex;
+gap:30px;
+}
+
+.nav-links a{
+text-decoration:none;
+color:#ccc;
+transition:.3s;
+}
+
+.nav-links a:hover{
+color:#00ff66;
+}
+
+.btn{
+padding:12px 25px;
+border:none;
+background:#00ff66;
+color:black;
+font-weight:700;
+border-radius:30px;
+cursor:pointer;
+transition:.3s;
+box-shadow:0 0 20px #00ff6660;
+}
+
+.btn:hover{
+transform:translateY(-4px) scale(1.05);
+}
+
+/* Hero */
+.hero{
+min-height:100vh;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:80px 8%;
+flex-wrap:wrap;
+gap:50px;
+}
+
+.hero-text{
+flex:1;
+min-width:300px;
+}
+
+.hero-text p{
+color:#00ff66;
+letter-spacing:5px;
+margin-bottom:20px;
+text-transform:uppercase;
+}
+
+.hero-text h1{
+font-size:75px;
+line-height:1.1;
+font-family:'Orbitron',sans-serif;
+margin-bottom:20px;
+}
+
+.hero-text h1 span{
+color:#00ff66;
+text-shadow:0 0 20px #00ff66;
+}
+
+.hero-text .desc{
+color:#aaa;
+line-height:1.8;
+max-width:700px;
+margin-bottom:35px;
+}
+
+.hero-buttons{
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.card{
+flex:1;
+max-width:450px;
+min-width:300px;
+background:#ffffff08;
+padding:35px;
+border-radius:30px;
+backdrop-filter:blur(15px);
+border:1px solid #00ff6630;
+box-shadow:0 0 40px #00ff6615;
+}
+
+.profile{
+display:flex;
+align-items:center;
+gap:15px;
+margin-bottom:30px;
+}
+
+.avatar{
+width:70px;
+height:70px;
+border-radius:50%;
+background:#00ff66;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:900;
+font-size:24px;
+color:black;
+}
+
+.box{
+background:#00000070;
+padding:20px;
+border-radius:20px;
+margin-bottom:15px;
+border:1px solid #00ff6620;
+transition:.3s;
+}
+
+.box:hover{
+transform:translateY(-5px);
+}
+
+.online{
+display:flex;
+align-items:center;
+gap:10px;
+color:#00ff66;
+font-weight:600;
+}
+
+.dot{
+width:12px;
+height:12px;
+border-radius:50%;
+background:#00ff66;
+animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+50%{opacity:.3}
+}
+
+/* Features */
+.section-title{
+text-align:center;
+font-size:50px;
+font-family:'Orbitron',sans-serif;
+margin-bottom:50px;
+color:#00ff66;
+}
+
+.features{
+padding:100px 8%;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:30px;
+}
+
+.feature{
+background:#ffffff08;
+padding:35px;
+border-radius:25px;
+border:1px solid #00ff6620;
+transition:.3s;
+}
+
+.feature:hover{
+transform:translateY(-10px);
+box-shadow:0 0 30px #00ff6620;
+}
+
+.feature h3{
+margin:20px 0;
+font-size:25px;
+}
+
+.feature p{
+color:#aaa;
+line-height:1.7;
+}
+
+.icon{
+font-size:50px;
+}
+
+/* Community */
+.community{
+padding:100px 8%;
+}
+
+.community-boxes{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+}
+
+.community-card{
+background:#ffffff08;
+padding:30px;
+border-radius:25px;
+border:1px solid #00ff6620;
+}
+
+.community-card ul{
+margin-top:15px;
+padding-left:20px;
+color:#aaa;
+line-height:1.8;
+}
+
+/* Trending */
+.trending{
+padding:100px 8%;
+}
+
+.trending-posts{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:30px;
+}
+
+.post{
+background:#ffffff08;
+padding:25px;
+border-radius:25px;
+border:1px solid #00ff6620;
+}
+
+.tag{
+color:#00ff66;
+margin-bottom:15px;
+display:inline-block;
+}
+
+.actions{
+display:flex;
+gap:15px;
+margin-top:20px;
+}
+
+.actions button{
+flex:1;
+padding:10px;
+border:none;
+border-radius:10px;
+background:#00ff6615;
+color:#00ff66;
+cursor:pointer;
+transition:.3s;
+}
+
+.actions button:hover{
+background:#00ff6640;
+}
+
+/* Chat */
+.chat-section{
+padding:100px 8%;
+}
+
+.chat-box{
+background:#ffffff08;
+border-radius:25px;
+padding:30px;
+border:1px solid #00ff6620;
+}
+
+.messages{
+height:250px;
+overflow-y:auto;
+margin-bottom:20px;
+}
+
+.message{
+background:#00ff6615;
+padding:12px 18px;
+border-radius:15px;
+margin-bottom:10px;
+width:fit-content;
+max-width:80%;
+}
+
+.chat-input{
+display:flex;
+gap:10px;
+}
+
+.chat-input input{
+flex:1;
+padding:15px;
+background:black;
+border:1px solid #00ff6630;
+color:white;
+border-radius:15px;
+}
+
+/* Notification */
+.notification{
+position:fixed;
+top:100px;
+right:30px;
+background:#00ff66;
+color:black;
+padding:15px 25px;
+border-radius:15px;
+font-weight:700;
+transform:translateX(400px);
+transition:.5s;
+z-index:999;
+}
+
+.notification.show{
+transform:translateX(0);
+}
+
+/* Modal */
+.modal{
+position:fixed;
+inset:0;
+background:#000000c0;
+display:none;
+align-items:center;
+justify-content:center;
+z-index:1000;
+}
+
+.modal-content{
+background:#0d0d0d;
+padding:40px;
+width:90%;
+max-width:450px;
+border-radius:25px;
+border:1px solid #00ff6630;
+}
+
+.modal-content h2{
+margin-bottom:25px;
+color:#00ff66;
+font-family:'Orbitron',sans-serif;
+}
+
+.modal-content input{
+width:100%;
+padding:15px;
+margin-bottom:15px;
+background:black;
+border:1px solid #00ff6630;
+color:white;
+border-radius:12px;
+}
+
+.close{
+float:right;
+font-size:30px;
+cursor:pointer;
+}
+
+/* Footer */
+footer{
+padding:40px;
+text-align:center;
+color:#777;
+border-top:1px solid #00ff6620;
+margin-top:80px;
+}
+
+/* Cursor */
+.cursor{
+position:fixed;
+width:20px;
+height:20px;
+border:2px solid #00ff66;
+border-radius:50%;
+pointer-events:none;
+transform:translate(-50%,-50%);
+box-shadow:0 0 20px #00ff66;
+z-index:9999;
+}
+
+@media(max-width:900px){
+.hero-text h1{
+font-size:50px;
+}
+.nav-links{
+display:none;
+}
+}
+</style>
+</head>
+<body>
+
+<div id="loader">
+<h1>SOCIAL TOXIC</h1>
+<div class="typing">Initializing cyber network... Access Granted...</div>
+</div>
+
+<canvas id="matrix"></canvas>
+<div class="cursor"></div>
+
+<div class="notification" id="notification">New follower joined your profile!</div>
+
+<nav>
+<div class="logo">SOCIAL TOXIC</div>
+
+<div class="nav-links">
+<a href="#home">Home</a>
+<a href="#features">Features</a>
+<a href="#community">Community</a>
+<a href="#trending">Trending</a>
+<a href="#chat">Chat</a>
+</div>
+
+<button class="btn" onclick="openModal()">Join Now</button>
+</nav>
+
+<section class="hero" id="home">
+<div class="hero-text">
+<p>Future Social Network</p>
+<h1>Enter The <span>Toxic</span> World</h1>
+<p class="desc">
+A futuristic cyberpunk social platform with anonymous posting, hacker aesthetics, live communities, glowing neon interface, real-time interactions, and modern dark UI effects.
+</p>
+
+<div class="hero-buttons">
+<button class="btn" onclick="scrollToFeatures()">Explore</button>
+<button class="btn" onclick="watchDemo()">Watch Demo</button>
+<button class="btn" onclick="showNotification('AI Toxic Bot Activated!')">AI Toxic Bot</button>
+</div>
+</div>
+
+<div class="card">
+<div class="profile">
+<div class="avatar">ST</div>
+<div>
+<h2>Social Toxic</h2>
+<p style="color:#00ff66">Cyber Community</p>
+</div>
+</div>
+
+<div class="box">
+<p>Trending Topic</p>
+<h3>#CyberSociety2099</h3>
+</div>
+
+<div class="box">
+<p>Live Users</p>
+<h3 id="users">1,204,583</h3>
+</div>
+
+<div class="box">
+<div class="online">
+<div class="dot"></div>
+Servers Online
+</div>
+</div>
+</div>
+</section>
+
+<section class="features" id="features">
+<h2 class="section-title">Features</h2>
+
+<div class="grid">
+<div class="feature">
+<div class="icon">⚡</div>
+<h3>Dark Neon UI</h3>
+<p>Futuristic black and green cyberpunk interface with glowing glassmorphism design.</p>
+</div>
+
+<div class="feature">
+<div class="icon">🤖</div>
+<h3>AI Toxic Bot</h3>
+<p>Built-in neon chatbot assistant with futuristic AI interactions.</p>
+</div>
+
+<div class="feature">
+<div class="icon">💬</div>
+<h3>Live Community</h3>
+<p>Join public chat rooms, anonymous discussions, and viral communities.</p>
+</div>
+
+<div class="feature">
+<div class="icon">🚀</div>
+<h3>Fast Dashboard</h3>
+<p>Responsive animations and lightning-fast futuristic experience.</p>
+</div>
+</div>
+</section>
+
+<section class="community" id="community">
+<h2 class="section-title">Community</h2>
+
+<div class="community-boxes">
+<div class="community-card">
+<h3>🎮 Gaming</h3>
+<ul>
+<li>eSports chats</li>
+<li>Gaming memes</li>
+<li>Live discussions</li>
+</ul>
+</div>
+
+<div class="community-card">
+<h3>👾 Anime</h3>
+<ul>
+<li>Anime posts</li>
+<li>Cosplay uploads</li>
+<li>Fan communities</li>
+</ul>
+</div>
+
+<div class="community-card">
+<h3>💀 Anonymous</h3>
+<ul>
+<li>Hidden identities</li>
+<li>Secret confessions</li>
+<li>Dark discussions</li>
+</ul>
+</div>
+</div>
+</section>
+
+<section class="trending" id="trending">
+<h2 class="section-title">Trending Posts</h2>
+
+<div class="trending-posts">
+<div class="post">
+<div class="tag">#CyberHack</div>
+<h3>New AI network detected in Toxic City.</h3>
+<p style="margin-top:15px;color:#aaa;line-height:1.7">
+Underground communities are discovering mysterious AI systems across the digital world.
+</p>
+
+<div class="actions">
+<button onclick="likePost(this)">❤️ Like</button>
+<button onclick="commentPost()">💬 Comment</button>
+</div>
+</div>
+
+<div class="post">
+<div class="tag">#NeonElite</div>
+<h3>Cyber gamers reached Neon Elite rank.</h3>
+<p style="margin-top:15px;color:#aaa;line-height:1.7">
+Top players unlocked exclusive neon toxic badges and futuristic profile themes.
+</p>
+
+<div class="actions">
+<button onclick="likePost(this)">❤️ Like</button>
+<button onclick="commentPost()">💬 Comment</button>
+</div>
+</div>
+</div>
+</section>
+
+<section class="chat-section" id="chat">
+<h2 class="section-title">Live Chat</h2>
+
+<div class="chat-box">
+<div class="messages" id="messages">
+<div class="message">Welcome to Social Toxic 👾</div>
+<div class="message">Cyber systems online ⚡</div>
+</div>
+
+<div class="chat-input">
+<input type="text" id="chatInput" placeholder="Enter message...">
+<button class="btn" onclick="sendMessage()">Send</button>
+</div>
+</div>
+</section>
+
+<footer>
+© 2026 SOCIAL TOXIC • FUTURISTIC CYBER SOCIAL NETWORK
+</footer>
+
+<!-- Signup Modal -->
+<div class="modal" id="modal">
+<div class="modal-content">
+<span class="close" onclick="closeModal()">&times;</span>
+<h2>Create Account</h2>
+<input type="text" id="username" placeholder="Username">
+<input type="email" id="email" placeholder="Email">
+<input type="password" id="password" placeholder="Password">
+<input type="file">
+<button class="btn" style="width:100%" onclick="signup()">Join Social Toxic</button>
+</div>
+</div>
+
+<script>
+// Loader
+setTimeout(()=>{
+document.getElementById('loader').style.display='none';
+},3500)
+
+// Matrix Rain
+const canvas=document.getElementById('matrix');
+const ctx=canvas.getContext('2d');
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+const letters='SOCIALTOXIC101010101';
+const array=letters.split('');
+const fontSize=16;
+const columns=canvas.width/fontSize;
+const drops=[];
+
+for(let x=0;x<columns;x++) drops[x]=1;
+
+function draw(){
+ctx.fillStyle='rgba(0,0,0,0.05)';
+ctx.fillRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle='#00ff66';
+ctx.font=fontSize+'px monospace';
+
+for(let i=0;i<drops.length;i++){
+const text=array[Math.floor(Math.random()*array.length)];
+ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+
+if(drops[i]*fontSize>canvas.height&&Math.random()>0.975){
+drops[i]=0;
+}
+
+drops[i]++;
+}
+}
+
+setInterval(draw,35);
+
+// Cursor
+const cursor=document.querySelector('.cursor');
+document.addEventListener('mousemove',e=>{
+cursor.style.left=e.clientX+'px';
+cursor.style.top=e.clientY+'px';
+})
+
+// Notification
+function showNotification(text){
+const notification=document.getElementById('notification');
+notification.innerText=text;
+notification.classList.add('show');
+
+setTimeout(()=>{
+notification.classList.remove('show');
+},3000)
+}
+
+setTimeout(()=>{
+showNotification('Someone liked your post ⚡');
+},5000)
+
+// Modal
+function openModal(){
+document.getElementById('modal').style.display='flex';
+}
+
+function closeModal(){
+document.getElementById('modal').style.display='none';
+}
+
+// Signup
+function signup(){
+const username=document.getElementById('username').value;
+const email=document.getElementById('email').value;
+
+if(username===''||email===''){
+alert('Please fill all fields');
+return;
+}
+
+localStorage.setItem('socialtoxic_user',username);
+showNotification('Account Created Successfully ⚡');
+closeModal();
+}
+
+// Explore
+function scrollToFeatures(){
+document.getElementById('features').scrollIntoView({behavior:'smooth'});
+}
+
+// Demo
+function watchDemo(){
+window.open('https://www.youtube.com','_blank');
+}
+
+// Likes
+function likePost(button){
+button.innerHTML='💚 Liked';
+showNotification('Post liked successfully');
+}
+
+function commentPost(){
+showNotification('Comment feature opening soon');
+}
+
+// Chat
+function sendMessage(){
+const input=document.getElementById('chatInput');
+const messages=document.getElementById('messages');
+
+if(input.value.trim()==='') return;
+
+const msg=document.createElement('div');
+msg.className='message';
+msg.innerText=input.value;
+messages.appendChild(msg);
+
+messages.scrollTop=messages.scrollHeight;
+input.value='';
+}
+
+// Online Users Counter
+let users=1204583;
+setInterval(()=>{
+users+=Math.floor(Math.random()*10);
+document.getElementById('users').innerText=users.toLocaleString();
+},3000)
+</script>
+
+</body>
+</html>
